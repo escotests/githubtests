@@ -1,9 +1,10 @@
-stage 'Load a file from GitHub'
-def helloworld = fileLoader.fromGit('examples/fileLoader/helloworld', 
-        'https://github.com/escoem/workflow-remote-loader-plugin.git', 'master', null, '')
-
-stage 'Run method from the loaded file'
 node {
+        stage 'Load a file from GitHub'
+        def helloworld = fileLoader.fromGit('examples/fileLoader/helloworld', 
+                'https://github.com/escoem/workflow-remote-loader-plugin.git', 'master', null, '')
+        
+        stage 'Run method from the loaded file'
+
 
     helloworld.printHello()
     git 'https://github.com/escotests/githubtests.git'
