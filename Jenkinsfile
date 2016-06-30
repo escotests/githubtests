@@ -7,8 +7,9 @@ node {
 
 
     helloworld.printHello()
-    git 'https://github.com/escotests/githubtests.git'
-
+    //git 'https://github.com/escotests/githubtests.git'
+    checkout scm
+    
     def changeLogSets = currentBuild.rawBuild.changeSets
     for (int i = 0; i < changeLogSets.size(); i++) {
         def entries = changeLogSets[i].items
