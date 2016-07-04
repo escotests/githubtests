@@ -64,6 +64,7 @@ def devBuildNotification(def releaseNumber){
 
 @NonCPS 
 def getChangesets(){ 
+        def appProjectURL = "https://github.com/escotests/githubtests.git"
         String commitChanges =""; 
         def changeLogSets = currentBuild.rawBuild.changeSets 
         changeLogSets.every{changeLogSet -> 
