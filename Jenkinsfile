@@ -22,11 +22,11 @@
 }*/
 
 // repo1
-def cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
+def cdProjectURL = "git@github.com:escoem/workflow-remote-loader-plugin.git"
 def cdProjectBranch = "master"
 //def env.gitAuthCredential 
 // repo2
-def appProjectURL = "https://github.com/escotests/githubtests.git"
+def appProjectURL = "git@github.com:escotests/githubtests.git"
 def appProjectBranch = "bran"
 //def env.gitAuthCredential 
 
@@ -38,7 +38,7 @@ node {
         def cdBuildProperties, cdCommonProperties, cdAppProperties 
         stage 'Setup' 
         // use for loading common pipeline code properties from folder level env. variables 
-        fileLoader.withGit( "${cdProjectURL}", "${cdProjectBranch}", null, "") { 
+        fileLoader.withGit( "${cdProjectURL}", "${cdProjectBranch}", "fcda45f6-2063-4c3f-92f6-42e7c7760f45", "") { 
                 cdCommonProperties = fileLoader.load("${cdCommonPropertiesLoc}"); 
                 cdBuildProperties = fileLoader.load("${cdBuildPropertiesLoc}"); 
         }
@@ -57,7 +57,7 @@ node {
 }
 
 def customCheckout(def sourceCodeRepoCredentials, def sourceCodeRepoURL, def branch){ 
-        git url:"${sourceCodeRepoURL}", branch:"${branch}" 
+        git credentialId: "fcda45f6-2063-4c3f-92f6-42e7c7760f45", url:"${sourceCodeRepoURL}", branch:"${branch}" 
 }
 
 def devBuildNotification(def releaseNumber){ 
