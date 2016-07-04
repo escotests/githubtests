@@ -53,7 +53,7 @@ node {
 
         stage 'RTLNotification' 
         // use for sending mail notification 
-        devBuildNotification(cdAppProperties.lookAtThis("yo")) 
+        devBuildNotification(cdAppProperties.printHello()) 
 }
 
 def customCheckout(def sourceCodeRepoCredentials, def sourceCodeRepoURL, def branch){ 
