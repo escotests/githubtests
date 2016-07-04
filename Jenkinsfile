@@ -44,6 +44,9 @@ node {
         }
 
         stage 'Checkout' 
+        appProjectURL = cdProjectURL
+        appProjectBranch = cdProjectBranch
+        cdAppPropertiesLoc = cdBuildPropertiesLoc
         // use for checking out app source code 
         customCheckout( null,"${appProjectURL}", "${appProjectBranch}") 
         cdAppProperties= load("${cdAppPropertiesLoc}");
