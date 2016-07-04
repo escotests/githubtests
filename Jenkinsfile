@@ -22,31 +22,31 @@
 }*/
 
 // repo1
-def ENV.cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
-def ENV.cdProjectBranch = "master"
+def env.cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
+def env.cdProjectBranch = "master"
 //def env.gitAuthCredential 
 // repo2
-def ENV.appProjectURL = "https://github.com/escotests/githubtests.git"
-def ENV.appProjectBranch "bran"
+def env.appProjectURL = "https://github.com/escotests/githubtests.git"
+def env.appProjectBranch "bran"
 //def env.gitAuthCredential 
 
-def ENV.cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
-def ENV.cdBuildPropertiesLoc = "examples/fileLoader/helloworld.groovy"
-def ENV.cdAppPropertiesLoc = "myExternalMethod.groovy"
+def env.cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
+def env.cdBuildPropertiesLoc = "examples/fileLoader/helloworld.groovy"
+def env.cdAppPropertiesLoc = "myExternalMethod.groovy"
 
 node { 
         def cdBuildProperties, cdCommonProperties, cdAppProperties 
         stage 'Setup' 
         // use for loading common pipeline code properties from folder level env. variables 
-        fileLoader.withGit( "${ENV.cdProjectURL}", "${ENV.cdProjectBranch}", null, "") { 
-                cdCommonProperties = fileLoader.load("${ENV.cdCommonPropertiesLoc}"); 
-                cdBuildProperties = fileLoader.load("${ENV.cdBuildPropertiesLoc}"); 
+        fileLoader.withGit( "${env.cdProjectURL}", "${env.cdProjectBranch}", null, "") { 
+                cdCommonProperties = fileLoader.load("${env.cdCommonPropertiesLoc}"); 
+                cdBuildProperties = fileLoader.load("${env.cdBuildPropertiesLoc}"); 
         }
 
         stage 'Checkout' 
         // use for checking out app source code 
-        customCheckout( null,"${ENV.appProjectURL}", "${ENV.appProjectBranch}") 
-        cdAppProperties= load("${ENV.cdAppPropertiesLoc}");
+        customCheckout( null,"${env.appProjectURL}", "${env.appProjectBranch}") 
+        cdAppProperties= load("${env.cdAppPropertiesLoc}");
 
         stage 'RTLNotification' 
         // use for sending mail notification 
