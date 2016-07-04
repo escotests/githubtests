@@ -44,16 +44,13 @@ node {
         }
 
         stage 'Checkout' 
-        appProjectURL = cdProjectURL
-        appProjectBranch = cdProjectBranch
-        cdAppPropertiesLoc = cdBuildPropertiesLoc
         // use for checking out app source code 
         customCheckout( null,"${appProjectURL}", "${appProjectBranch}") 
         cdAppProperties= load("${cdAppPropertiesLoc}");
 
         stage 'RTLNotification' 
         // use for sending mail notification 
-        devBuildNotification(cdAppProperties.printHello()) 
+        devBuildNotification(cdAppProperties.lookAtThis("yo")) 
 }
 
 def customCheckout(def sourceCodeRepoCredentials, def sourceCodeRepoURL, def branch){ 
