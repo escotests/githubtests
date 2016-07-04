@@ -27,7 +27,7 @@ def cdProjectBranch = "master"
 //def env.gitAuthCredential 
 // repo2
 def appProjectURL = "https://github.com/escotests/githubtests.git"
-def appProjectBranch "bran"
+def appProjectBranch = "bran"
 //def env.gitAuthCredential 
 
 def cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
