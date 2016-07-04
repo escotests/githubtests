@@ -1,4 +1,4 @@
-node {
+/*node {
         stage 'Load a file from GitHub'
         def helloworld = fileLoader.fromGit('examples/fileLoader/helloworld', 
                 'https://github.com/escoem/workflow-remote-loader-plugin.git', 'master', null, '')
@@ -19,4 +19,79 @@ node {
         }
     }
     helloworld.printHello()
+}*/
+
+// repo1
+def env.cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
+def env.cdProjectBranch = "master"
+//def env.gitAuthCredential 
+// repo2
+def env.appProjectURL = "https://github.com/escotests/githubtests.git"
+def env.appProjectBranch "bran"
+//def env.gitAuthCredential 
+
+def env.cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
+def env.cdBuildPropertiesLoc = "examples/fileLoader/helloworld.groovy"
+def env.cdAppPropertiesLoc = "myExternalMethod.groovy"
+
+node { 
+        def cdBuildProperties, cdCommonProperties, cdAppProperties 
+        stage 'Setup' 
+        // use for loading common pipeline code properties from folder level env. variables 
+        fileLoader.withGit( "${env.cdProjectURL}", "${env.cdProjectBranch}", null, "") { 
+                cdCommonProperties = fileLoader.load("${env.cdCommonPropertiesLoc}"); 
+                cdBuildProperties = fileLoader.load("${env.cdBuildPropertiesLoc}"); 
+        }
+
+        stage 'Checkout' 
+        // use for checking out app source code 
+        customCheckout( null,"${env.appProjectURL}", "${env.appProjectBranch}") 
+        cdAppProperties= load("${env.cdAppPropertiesLoc}");
+
+        stage 'RTLNotification' 
+        // use for sending mail notification 
+        devBuildNotification(cdAppProperties.getReleaseNumber()) 
 }
+
+def customCheckout(def sourceCodeRepoCredentials, def sourceCodeRepoURL, def branch){ 
+        git url:"${sourceCodeRepoURL}", branch:"${branch}" 
+}
+
+def devBuildNotification(def releaseNumber){ 
+        //to get commit change logs in table format to send in notification 
+        String changeSets = getChangesets() 
+}
+
+@NonCPS 
+def getChangesets(){ 
+        String commitChanges =""; 
+        def changeLogSets = currentBuild.rawBuild.changeSets 
+        changeLogSets.every{changeLogSet -> 
+                changeLogSet.every{entries -> 
+                        entries.every{ entry -> 
+                                commitChanges +="<tr>" 
+                                entry.every{it-> 
+                                        String appCommitIdURL = "${env.appProjectURL}".split("@")[1].replace(":", "/").split(".git")[0]+"/commit/${it.commitId}" 
+                                        appCommitIdURL = "https://${appCommitIdURL}" 
+                                        commitChanges += "<td style=\"text-align: center; border: 1px solid black;\"><a href='\"${appCommitIdURL}\"'>${it.commitId}</a></td>" 
+echo "${appCommitIdURL}" 
+                                        commitChanges += "<td style=\"text-align: center; border: 1px solid black;\">${it.author}</td>" 
+                                        java.util.Date date = new java.util.Date(it.timestamp ); 
+                                        commitChanges += " <td style=\"text-align: center; border: 1px solid black;\">${date}</td>" 
+                                        commitChanges +="<td style=\"text-align: center; border: 1px solid black;\">${it.msg}</td>" 
+                                        commitChanges +="<td style=\"text-align: center; border: 1px solid black;\">" 
+                                        it.affectedFiles.every{file-> 
+                                                commitChanges += "${file.path} " 
+                                        } 
+                                        commitChanges += "</td></tr>" 
+                                } 
+                        } 
+                } 
+        } 
+        String commitChangesTable="" 
+        if(commitChanges != ""){ 
+                String commitChangesTitle = "<H3>ChangeLogs: </H3>" 
+                commitChangesTable = commitChangesTitle +"<TABLE style=\"width:100%; border: 1px solid black;border-collapse: collapse\"><tr style=\"background-color: yellowgreen\"><th style= \" border: 1 px solid black;\">Commit Id</th><th style = \" border: 1 px solid black;\">Author</th><th style = \" border: 1 px solid black;\">Commit Date</th><th style = \" border: 1 px solid black;\">Commit Message</th><th style = \" border: 1 px solid black;\">Fileset</th></tr>" + "$commitChanges" + "</TABLE>" 
+        } 
+        return commitChangesTable; 
+} 
