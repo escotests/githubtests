@@ -22,31 +22,31 @@
 }*/
 
 // repo1
-def env.cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
-def env.cdProjectBranch = "master"
+def cdProjectURL = "https://github.com/escoem/workflow-remote-loader-plugin.git"
+def cdProjectBranch = "master"
 //def env.gitAuthCredential 
 // repo2
-def env.appProjectURL = "https://github.com/escotests/githubtests.git"
-def env.appProjectBranch "bran"
+def appProjectURL = "https://github.com/escotests/githubtests.git"
+def appProjectBranch "bran"
 //def env.gitAuthCredential 
 
-def env.cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
-def env.cdBuildPropertiesLoc = "examples/fileLoader/helloworld.groovy"
-def env.cdAppPropertiesLoc = "myExternalMethod.groovy"
+def cdCommonPropertiesLoc = "examples/fileLoader/environment.groovy"
+def cdBuildPropertiesLoc = "examples/fileLoader/helloworld.groovy"
+def cdAppPropertiesLoc = "myExternalMethod.groovy"
 
 node { 
         def cdBuildProperties, cdCommonProperties, cdAppProperties 
         stage 'Setup' 
         // use for loading common pipeline code properties from folder level env. variables 
-        fileLoader.withGit( "${env.cdProjectURL}", "${env.cdProjectBranch}", null, "") { 
-                cdCommonProperties = fileLoader.load("${env.cdCommonPropertiesLoc}"); 
-                cdBuildProperties = fileLoader.load("${env.cdBuildPropertiesLoc}"); 
+        fileLoader.withGit( "${cdProjectURL}", "${cdProjectBranch}", null, "") { 
+                cdCommonProperties = fileLoader.load("${cdCommonPropertiesLoc}"); 
+                cdBuildProperties = fileLoader.load("${cdBuildPropertiesLoc}"); 
         }
 
         stage 'Checkout' 
         // use for checking out app source code 
-        customCheckout( null,"${env.appProjectURL}", "${env.appProjectBranch}") 
-        cdAppProperties= load("${env.cdAppPropertiesLoc}");
+        customCheckout( null,"${appProjectURL}", "${appProjectBranch}") 
+        cdAppProperties= load("${cdAppPropertiesLoc}");
 
         stage 'RTLNotification' 
         // use for sending mail notification 
