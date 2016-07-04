@@ -50,7 +50,7 @@ node {
 
         stage 'RTLNotification' 
         // use for sending mail notification 
-        devBuildNotification(cdAppProperties.getReleaseNumber()) 
+        devBuildNotification(cdAppProperties.lookAtThis("yo")) 
 }
 
 def customCheckout(def sourceCodeRepoCredentials, def sourceCodeRepoURL, def branch){ 
@@ -71,7 +71,7 @@ def getChangesets(){
                         entries.every{ entry -> 
                                 commitChanges +="<tr>" 
                                 entry.every{it-> 
-                                        String appCommitIdURL = "${env.appProjectURL}".split("@")[1].replace(":", "/").split(".git")[0]+"/commit/${it.commitId}" 
+                                        String appCommitIdURL = "${appProjectURL}".split("@")[1].replace(":", "/").split(".git")[0]+"/commit/${it.commitId}" 
                                         appCommitIdURL = "https://${appCommitIdURL}" 
                                         commitChanges += "<td style=\"text-align: center; border: 1px solid black;\"><a href='\"${appCommitIdURL}\"'>${it.commitId}</a></td>" 
 echo "${appCommitIdURL}" 
