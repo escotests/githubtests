@@ -72,7 +72,7 @@ def getChangesets(){
                         entries.every{ entry -> 
                                 commitChanges +="<tr>" 
                                 entry.every{it-> 
-                                        String appCommitIdURL = "${appProjectURL}".split("@")[1].replace(":", "/").split(".git")[0]+"/commit/${it.commitId}" 
+                                        String appCommitIdURL = "github.com/escotests/githubtests"+"/commit/${it.commitId}" 
                                         appCommitIdURL = "https://${appCommitIdURL}" 
                                         commitChanges += "<td style=\"text-align: center; border: 1px solid black;\"><a href='\"${appCommitIdURL}\"'>${it.commitId}</a></td>" 
 echo "${appCommitIdURL}" 
